@@ -4,35 +4,35 @@
 
 <div id="dropzone" class="dropzone" tabindex="0" aria-label="Upload or paste zone">
   <!-- Dropzone view -->
-  <div id="dzView">
+  <div id="dz-view">
     <p><strong>Drag &amp; drop</strong> files here</p>
     <p>or <strong>paste</strong> from clipboard (Ctrl/⌘ + V)</p>
     <p>or</p>
 
     <div class="row">
-      <input id="fileInput" type="file" multiple />
-      <button id="uploadBtn" type="button">Upload selected</button>
+      <input id="file-input" type="file" multiple />
+      <button id="upload-btn" type="button">Upload selected</button>
     </div>
 
     <p class="hint">Tip: double-click or start typing to paste plain text instead.</p>
   </div>
 
   <!-- Text view (hidden by default) -->
-  <div id="textView" class="card" style="display:none; width:100%;">
-    <form id="pasteForm">
+  <div id="text-view" class="card" style="display:none;">
+    <form id="paste-form">
       <label for="pasteContent"><strong>Paste content</strong></label><br />
       <textarea
-        id="pasteContent"
+        id="paste-content"
         name="content"
         rows="12"
-        style="width:100%;"
+        style="min-width:88ch;"
         placeholder="Type or paste plain text here..."
       ></textarea>
 
       <div class="row" style="margin-top:12px;">
         <label>
           Language:
-          <select id="pasteLang" name="language">
+          <select id="paste-lang" name="language">
             <option value="plaintext">Plain text</option>
             <option value="json">JSON</option>
             <option value="yaml">YAML</option>
@@ -44,8 +44,8 @@
           </select>
         </label>
 
-        <button id="pasteBtn" type="submit">Create link</button>
-        <button id="cancelTextBtn" type="button">Cancel</button>
+        <button id="paste-btn" type="submit">Create link</button>
+        <button id="cancel-text-btn" type="button">Cancel</button>
       </div>
 
       <p class="hint" style="margin-top:8px;">Esc or Cancel returns to file drop mode.</p>

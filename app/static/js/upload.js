@@ -1,16 +1,16 @@
 const dropzone = document.getElementById('dropzone')
-const fileInput = document.getElementById('fileInput')
-const uploadBtn = document.getElementById('uploadBtn')
+const fileInput = document.getElementById('file-input')
+const uploadBtn = document.getElementById('upload-btn')
 const resultEl = document.getElementById('result')
 
-const pasteForm = document.getElementById('pasteForm')
-const pasteContent = document.getElementById('pasteContent')
-const pasteLang = document.getElementById('pasteLang')
+const pasteForm = document.getElementById('paste-form')
+const pasteContent = document.getElementById('paste-content')
+const pasteLang = document.getElementById('paste-lang')
 
 // Combined-zone view elements (exist only in the combined template version)
-const dzView = document.getElementById('dzView')
-const textView = document.getElementById('textView')
-const cancelTextBtn = document.getElementById('cancelTextBtn')
+const dzView = document.getElementById('dz-view')
+const textView = document.getElementById('text-view')
+const cancelTextBtn = document.getElementById('cancel-text-btn')
 
 let pendingFiles = []
 let inTextMode = false

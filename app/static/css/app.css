@@ -1,29 +1,51 @@
-/* starter css */
-body{font-family:system-ui,-apple-system,sans-serif;}
+/* app.css */
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* starter css */
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Dropzone container */
 .dropzone {
   border: 2px dashed #999;
   border-radius: 12px;
   padding: 24px;
-  text-align: center;
   background: #fafafa;
   outline: none;
+  text-align: center;
+
+  /* ensure it can actually grow to available width */
+  display: block;
+  width: 100%;
+  max-width: 100%;
 }
 
+/* Drag feedback */
 .dropzone.dragover {
   border-color: #333;
   background: #f0f0f0;
 }
 
-.row { 
+/* Shared row layout */
+.row {
   display: flex;
   gap: 12px;
   justify-content: center;
   align-items: center;
   margin-top: 12px;
   flex-wrap: wrap;
+
+  /* important for flex children sizing correctly */
+  min-width: 0;
 }
 
+/* Results */
 .result {
   background: #111;
   color: #eee;
@@ -32,22 +54,67 @@ body{font-family:system-ui,-apple-system,sans-serif;}
   overflow: auto;
 }
 
+/* Helper text */
 .hint {
   color: #666;
   font-size: 0.9rem;
   margin-top: 10px;
 }
 
+/* Card styling */
 .card {
   margin-top: 16px;
   padding: 16px;
   border: 1px solid #ddd;
   border-radius: 12px;
   background: #fff;
+
+  /* ensure cards can expand */
+  width: 100%;
+  max-width: 100%;
 }
 
-textarea {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+/* --- Text mode layout inside dropzone --- */
+#text-view {
+  width: 100%;
+  max-width: 100%;
+
+  /* override dropzone's centered text */
+  text-align: left;
+
+  /* flex sizing safety */
+  min-width: 0;
+}
+
+#paste-form {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/*
+  Force the textarea to fill the available width.
+
+  You currently have inline: style="min-width:88ch;"
+  Inline styles are hard to override, so we use !important.
+
+  This uses:
+  - width: 100% so it grows with the parent
+  - min-width: min(88ch, 100%) so it *aims* for ~88ch but never exceeds its container
+*/
+#paste-content {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: min(88ch, 100%) !important;
   padding: 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", monospace;
+  resize: vertical;
+}
+
+/* In text mode, align the form controls to the left */
+#text-view .row {
+  justify-content: flex-start;
 }
 
