@@ -1,6 +1,23 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Upload or Paste</h2>
+
+<p>My application is Card Layout application</p>
+<div id="column-anchor" class="column">
+ <div id="card-bin" class="card">
+   <h3>Bin</h3>
+ </div> {# bin #}
+</div> {# anchor #}
+{% for column in columns %}
+<div class="column">
+    {% for card in column.cards %}
+    <div class="card">
+      <h3>{{ card.title }}</h3>
+      <p>{{ card.content }}</p>
+    </div>
+    {% endfor %}
+  </div>
+{% endfor %}
+
 
 <div id="dropzone" class="dropzone" tabindex="0" aria-label="Upload or paste zone">
   <!-- Dropzone view -->
@@ -53,8 +70,6 @@
   </div>
 </div>
  
-<h3>Results</h3>
-<pre id="result" class="result">No uploads yet.</pre>
 
 <script src="{{ url_for('static', path='js/upload.js') }}"></script>
 {% endblock %}

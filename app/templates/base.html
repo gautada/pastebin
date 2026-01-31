@@ -10,7 +10,43 @@
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
   </head>
   <body>
+
+{% block header %}
+<header>
+ <h1>Pastebin</h1>
+ <div class="search">
+   <input type="text" placeholder="Search..." aria-label="Search">
+   <button type="button">Search</button>
+ </div>
+ <div class="hamburger-menu">
+   <input type="checkbox" id="menu-toggle" />
+   <label for="menu-toggle" class="menu-icon">
+     <span></span>
+     <span></span>
+     <span></span>
+   </label>
+   <nav class="nav">
+     <ul>
+       <li><a href="#">Home</a></li>
+       <li><a href="#">Features</a></li>
+       <li><a href="#">Pricing</a></li>
+       <li><a href="#">Contact</a></li>
+     </ul>
+   </nav>
+ </div> 
+</header>
+{% endblock %}
+
     {% block content %}{% endblock %}
+
+{% block footer %}
+<footer>
+  <h3>Results</h3>
+  <pre id="result" class="result">No uploads yet.</pre>
+  <p>Status: Ready</p>
+</footer>
+{% endblock %}
+
   </body>
 </html>
 
