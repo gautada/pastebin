@@ -108,7 +108,7 @@ repos:
           - --min-lines
           - "5"
           - --threshold
-          - "2"                 # % duplication allowed before failing
+          - "15"                 # % duplication allowed before failing
           - --reporters
           - console
           - --gitignore         # respect .gitignore

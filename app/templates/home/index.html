@@ -1,14 +1,64 @@
 {% extends "base.html" %}
 {% block content %}
 
-<p>My application is Card Layout application</p>
-<div id="column-anchor" class="column">
- <div id="card-bin" class="card">
+<div class="columns">
+ <div id="column-anchor" class="column">
+  <h2 class="column-title">Anchor</h2> 
+  <div id="card-anchor" class="card">
    <h3>Bin</h3>
- </div> {# bin #}
-</div> {# anchor #}
+   <div class="card-content">
+    <p>bin card</p>
+   </div> {# card-content #}
+  </div> {# card-anchor #}
+ </div> {# column-anchor #}
+
+ <div class="column">
+  <h2 class="column-title">Column #2</h2> 
+  <div class="card">
+   <h3 class="card-title">Card A</h3>
+   <div class="card-content">
+    <p>lorem ipsum</p>
+   </div> {# card-content #}
+  </div> {# card #}
+
+  <div class="card">
+   <h3 class="card-title">Card B</h3>
+   <div class="card-content">
+    <p>lorem ipsum</p>
+   </div> {# card-content #}
+  </div> {# card #}
+
+  <div class="card">
+   <h3 class="card-title">Card C</h3>
+   <div class="card-content">
+    <p>lorem ipsum</p>
+   </div> {# card-content #}
+  </div> {# card #}
+ </div> {# column #}
+ 
+ <div class="column">
+  <h2 class="column-title">Column #3</h2> 
+  <div class="card">
+   <h3 class="card-title">Card D</h3>
+   <div class="card-content">
+    <p>lorem ipsum</p>
+   </div> {# card-content #}
+  </div> {# card #}
+ </div> {# column #}
+
+ <div class="column">
+  <h2 class="column-title">Column #4</h2> 
+  <div class="card">
+   <h3 class="card-title">Card E</h3>
+   <div class="card-content">
+    <p>lorem ipsum</p>
+   </div> {# card-content #}
+  </div> {# card #}
+ </div> {# column #}
+
 {% for column in columns %}
-<div class="column">
+ <div class="column">
+  <h2>{{ column.title }}</h2>
     {% for card in column.cards %}
     <div class="card">
       <h3>{{ card.title }}</h3>
@@ -17,6 +67,7 @@
     {% endfor %}
   </div>
 {% endfor %}
+</div>
 
 
 <div id="dropzone" class="dropzone" tabindex="0" aria-label="Upload or paste zone">
