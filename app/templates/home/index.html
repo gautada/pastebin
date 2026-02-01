@@ -8,13 +8,11 @@
   box-sizing: border-box;
 }
 
-/* starter css */
 body {
   font-family: system-ui, -apple-system, sans-serif;
 }
 
-
-/* Column styling */
+/* Layout  */
 .columns {
   display: flex;
   flex-wrap: nowrap;
@@ -28,117 +26,90 @@ body {
   box-sizing: border-box;
 }
 
-/* Card styling */
 .card {
   margin-top: 16px;
   padding: 16px;
   border: 2px solid black;
   border-radius: 12px;
   background: #fff;
-
   /* ensure cards can expand */
   width: 100%;
   max-width: 100%;
 }
-
-/* Dropzone styling */
-#dropzone {
-  border: 2px dashed #999;
-  border-radius: 12px;
-  padding: 24px;
-  background: #fafafa;
-  outline: none;
-  text-align: center;
-
-  /* ensure it can actually grow to available width */
-  display: block;
-  width: 100%;
-  max-width: 100%;
-}
-
-/* Drag feedback */
-#dropzone.dragover {
-  border-color: #333;
-  background: #f0f0f0;
-}
 </style>
-
-<script>
-// JavaScript for handling dropzone functionality
-const dropzone = document.getElementById('dropzone');
-const fileInput = document.getElementById('file-input');
-const uploadBtn = document.getElementById('upload-btn');
-const pasteForm = document.getElementById('paste-form');
-const pasteContent = document.getElementById('paste-content');
-
-let pendingFiles = [];
-
-// Handle file selection
-fileInput.addEventListener('change', (e) => addFiles(e.target.files));
-uploadBtn.addEventListener('click', () => uploadFiles(pendingFiles));
-
-// Drag & drop functionality
-if (dropzone) {
-  dropzone.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    dropzone.classList.add('dragover');
-  });
-
-  dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
-
-  dropzone.addEventListener('drop', (e) => {
-    e.preventDefault();
-    dropzone.classList.remove('dragover');
-    if (e.dataTransfer?.files?.length) addFiles(e.dataTransfer.files);
-  });
-
-  dropzone.addEventListener('paste', (e) => {
-    // handle paste event
-    handlePaste(e);
-  });
-}
-
-function addFiles(fileList) {
-  const files = Array.from(fileList || []);
-  if (!files.length) return;
-  pendingFiles.push(...files);
-  console.log(`Queued ${pendingFiles.length} file(s).`);
-}
-
-async function uploadFiles(files) {
-  const list = Array.from(files || []);
-  if (!list.length) return console.log('No files queued.');
-  console.log('Uploading...');
-  // Implement file upload logic
-}
-
-function handlePaste(e) {
-  const items = e.clipboardData?.items;
-  if (!items) return;
-  console.log('Pasting content...');
-  // Implement paste logic
-}
-</script>
 
 <div class="columns">
  <div id="column-anchor" class="column">
   <h2 class="column-title">Anchor</h2> 
-  <div id="card-upload" class="card">
-   <h3>Bin</h3>
-   <div class="card-content" id="dropzone" tabindex="0" aria-label="Upload or paste zone">
+  <div id="card-dropzone" class="card">
+   <h3 class="card-title">Dropzone</h3>
+   <div class="card-content" id="dropzone" tabindex="0" aria-label="Upload, paste, or drag and drop files here">
        <input type="file" id="file-input" style="display:none" multiple />
        <button id="upload-btn">Upload selected</button>
        <form id="paste-form" style="display:none">
          <textarea id="paste-content" placeholder="Paste content here..."></textarea>
-         <select id="paste-lang">
-           <option value="plaintext">Plain Text</option>
-           <option value="javascript">JavaScript</option>
-           <option value="python">Python</option>
-         </select>
          <button type="submit">Create Paste</button>
        </form>
-     </div>
-  </div> {# card-anchor #}
+       <p>Drag and drop files here, or click to select files</p>
+   </div> {# card-dropzone #}
+   
+   <script>
+   // JavaScript for handling dropzone functionality
+   const dropzone = document.getElementById('dropzone');
+   const fileInput = document.getElementById('file-input');
+   const uploadBtn = document.getElementById('upload-btn');
+   const pasteForm = document.getElementById('paste-form');
+   const pasteContent = document.getElementById('paste-content');
+   
+   let pendingFiles = [];
+   
+   // Handle file selection
+   fileInput.addEventListener('change', (e) => addFiles(e.target.files));
+   uploadBtn.addEventListener('click', () => uploadFiles(pendingFiles));
+   
+   // Drag & drop functionality
+   if (dropzone) {
+     dropzone.addEventListener('dragover', (e) => {
+       e.preventDefault();
+       dropzone.classList.add('dragover');
+     });
+   
+     dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+   
+     dropzone.addEventListener('drop', (e) => {
+       e.preventDefault();
+       dropzone.classList.remove('dragover');
+       if (e.dataTransfer?.files?.length) addFiles(e.dataTransfer.files);
+     });
+   
+     dropzone.addEventListener('paste', (e) => {
+       // handle paste event
+       handlePaste(e);
+     });
+   }
+   
+   function addFiles(fileList) {
+     const files = Array.from(fileList || []);
+     if (!files.length) return;
+     pendingFiles.push(...files);
+     console.log(`Queued ${pendingFiles.length} file(s).`);
+   }
+   
+   async function uploadFiles(files) {
+     const list = Array.from(files || []);
+     if (!list.length) return console.log('No files queued.');
+     console.log('Uploading...');
+     // Implement file upload logic
+   }
+   
+   function handlePaste(e) {
+     const items = e.clipboardData?.items;
+     if (!items) return;
+     console.log('Pasting content...');
+     // Implement paste logic
+   }
+   </script>
+  </div> {# card-dropzone #}
  </div> {# column-anchor #}
 
  <div class="column">
