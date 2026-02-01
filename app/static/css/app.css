@@ -11,6 +11,9 @@ body {
   font-family: system-ui, -apple-system, sans-serif;
 }
 
+
+
+
 /* Dropzone container */
 .dropzone {
   border: 2px dashed #999;
@@ -61,29 +64,6 @@ body {
   margin-top: 10px;
 }
 
-/* Column styling */
-.column {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  padding: 10px;
-  min-width: calc(33.33% - 20px);
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
-/* Card styling */
-.card {
-  margin-top: 16px;
-  padding: 16px;
-  border: 2px solid black;
-  border-radius: 12px;
-  background: #fff;
-
-  /* ensure cards can expand */
-  width: 100%;
-  max-width: 100%;
-}
 
 /* --- Text mode layout inside dropzone --- */
 #text-view {
