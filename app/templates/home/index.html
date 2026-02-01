@@ -4,13 +4,13 @@
 /* Column styling */
 .columns {
   display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    width: 100%;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  width: 100%;
 }
 
 .column {
-  flex: 0 0 calc(33.33% - 20px);
+  flex: 0 0 465px;
   padding: 10px;
   box-sizing: border-box;
 }
@@ -27,68 +27,104 @@
   width: 100%;
   max-width: 100%;
 }
+
+/* Dropzone styling */
+#dropzone {
+  border: 2px dashed #999;
+  border-radius: 12px;
+  padding: 24px;
+  background: #fafafa;
+  outline: none;
+  text-align: center;
+
+  /* ensure it can actually grow to available width */
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Drag feedback */
+#dropzone.dragover {
+  border-color: #333;
+  background: #f0f0f0;
+}
 </style>
+
+<script>
+// JavaScript for handling dropzone functionality
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('file-input');
+const uploadBtn = document.getElementById('upload-btn');
+const pasteForm = document.getElementById('paste-form');
+const pasteContent = document.getElementById('paste-content');
+
+let pendingFiles = [];
+
+// Handle file selection
+fileInput.addEventListener('change', (e) => addFiles(e.target.files));
+uploadBtn.addEventListener('click', () => uploadFiles(pendingFiles));
+
+// Drag & drop functionality
+if (dropzone) {
+  dropzone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropzone.classList.add('dragover');
+  });
+
+  dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+
+  dropzone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropzone.classList.remove('dragover');
+    if (e.dataTransfer?.files?.length) addFiles(e.dataTransfer.files);
+  });
+
+  dropzone.addEventListener('paste', (e) => {
+    // handle paste event
+    handlePaste(e);
+  });
+}
+
+function addFiles(fileList) {
+  const files = Array.from(fileList || []);
+  if (!files.length) return;
+  pendingFiles.push(...files);
+  console.log(`Queued ${pendingFiles.length} file(s).`);
+}
+
+async function uploadFiles(files) {
+  const list = Array.from(files || []);
+  if (!list.length) return console.log('No files queued.');
+  console.log('Uploading...');
+  // Implement file upload logic
+}
+
+function handlePaste(e) {
+  const items = e.clipboardData?.items;
+  if (!items) return;
+  console.log('Pasting content...');
+  // Implement paste logic
+}
+</script>
 
 <div class="columns">
  <div id="column-anchor" class="column">
   <h2 class="column-title">Anchor</h2> 
-  <div id="card-anchor" class="card">
-   {# <h3>Bin</h3>
-   <div class="card-content">
-    <p>bin card</p>
-   #}
-<div id="dropzone" class="dropzone" tabindex="0" aria-label="Upload or paste zone">
-  <!-- Dropzone view -->
-  <div id="dz-view">
-    <p><strong>Drag &amp; drop</strong> files here</p>
-    <p>or <strong>paste</strong> from clipboard (Ctrl/⌘ + V)</p>
-    <p>or</p>
-
-    <div class="row">
-      <input id="file-input" type="file" multiple />
-      <button id="upload-btn" type="button">Upload selected</button>
-    </div>
-
-    <p class="hint">Tip: double-click or start typing to paste plain text instead.</p>
-  </div>
-
-  <!-- Text view (hidden by default) -->
-  <div id="text-view" class="card" style="display:none;">
-    <form id="paste-form">
-      <label for="pasteContent"><strong>Paste content</strong></label><br />
-      <textarea
-        id="paste-content"
-        name="content"
-        rows="12"
-        style="min-width:88ch;"
-        placeholder="Type or paste plain text here..."
-      ></textarea>
-
-      <div class="row" style="margin-top:12px;">
-        <label>
-          Language:
-          <select id="paste-lang" name="language">
-            <option value="plaintext">Plain text</option>
-            <option value="json">JSON</option>
-            <option value="yaml">YAML</option>
-            <option value="bash">Bash</option>
-            <option value="python">Python</option>
-            <option value="javascript">JavaScript</option>
-            <option value="typescript">TypeScript</option>
-            <option value="sql">SQL</option>
-          </select>
-        </label>
-
-        <button id="paste-btn" type="submit">Create link</button>
-        <button id="cancel-text-btn" type="button">Cancel</button>
-      </div>
-
-      <p class="hint" style="margin-top:8px;">Esc or Cancel returns to file drop mode.</p>
-    </form>
-  </div>
-</div>
-
-   </div> {# card-content #}
+  <div id="card-upload" class="card">
+   <h3>Bin</h3>
+   <div class="card-content" id="dropzone" tabindex="0" aria-label="Upload or paste zone">
+       <input type="file" id="file-input" style="display:none" multiple />
+       <button id="upload-btn">Upload selected</button>
+       <form id="paste-form" style="display:none">
+         <textarea id="paste-content" placeholder="Paste content here..."></textarea>
+         <select id="paste-lang">
+           <option value="plaintext">Plain Text</option>
+           <option value="javascript">JavaScript</option>
+           <option value="python">Python</option>
+         </select>
+         <button type="submit">Create Paste</button>
+       </form>
+     </div>
   </div> {# card-anchor #}
  </div> {# column-anchor #}
 
