@@ -10,3 +10,8 @@ wheels/
 .venv
 
 data
+
+# macOS system files
+.DS_Store
+
+
