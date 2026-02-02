@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{ extends base.html" %}
 {% block content %}
 <style>
 
@@ -42,30 +42,30 @@ body {
  <div id="column-anchor" class="column">
   <h2 class="column-title">Anchor</h2> 
   <div id="card-dropzone" class="card">
-   <h3 class="card-title">Dropzone</h3>
-   <div class="card-content" id="dropzone" tabindex="0" aria-label="Upload, paste, or drag and drop files here">
-       <input type="file" id="file-input" style="display:none" multiple />
-       <button id="upload-btn">Upload selected</button>
-       <form id="paste-form" style="display:none">
-         <textarea id="paste-content" placeholder="Paste content here..."></textarea>
-         <button type="submit">Create Paste</button>
-       </form>
-       <p>Drag and drop files here, or click to select files</p>
-   </div> {# card-dropzone #}
+   <style>
+     .dropzone {
+       border: 2px dashed #999;
+       border-radius: 12px;
+       padding: 24px;
+       background: #fafafa;
+       outline: none;
+       text-align: center;
+       display: block;
+       width: 100%;
+       max-width: 100%;
+     }
+   
+     .dropzone.dragover {
+       border-color: #333;
+       background: #f0f0f0;
+     }
+   </style>
    
    <script>
    // JavaScript for handling dropzone functionality
    const dropzone = document.getElementById('dropzone');
-   const fileInput = document.getElementById('file-input');
-   const uploadBtn = document.getElementById('upload-btn');
-   const pasteForm = document.getElementById('paste-form');
-   const pasteContent = document.getElementById('paste-content');
-   
+   const uploadForm = document.getElementById('upload-form');
    let pendingFiles = [];
-   
-   // Handle file selection
-   fileInput.addEventListener('change', (e) => addFiles(e.target.files));
-   uploadBtn.addEventListener('click', () => uploadFiles(pendingFiles));
    
    // Drag & drop functionality
    if (dropzone) {
@@ -79,12 +79,10 @@ body {
      dropzone.addEventListener('drop', (e) => {
        e.preventDefault();
        dropzone.classList.remove('dragover');
-       if (e.dataTransfer?.files?.length) addFiles(e.dataTransfer.files);
-     });
-   
-     dropzone.addEventListener('paste', (e) => {
-       // handle paste event
-       handlePaste(e);
+       if (e.dataTransfer?.files?.length) {
+         addFiles(e.dataTransfer.files);
+         uploadFiles(pendingFiles);
+       }
      });
    }
    
@@ -96,17 +94,20 @@ body {
    }
    
    async function uploadFiles(files) {
-     const list = Array.from(files || []);
-     if (!list.length) return console.log('No files queued.');
+     const formData = new FormData(uploadForm);
+     files.forEach(file => formData.append('files', file));
      console.log('Uploading...');
-     // Implement file upload logic
-   }
    
-   function handlePaste(e) {
-     const items = e.clipboardData?.items;
-     if (!items) return;
-     console.log('Pasting content...');
-     // Implement paste logic
+     try {
+       const response = await fetch(uploadForm.action, {
+         method: 'POST',
+         body: formData
+       });
+       const result = await response.json();
+       console.log(result);
+     } catch (error) {
+       console.error('Error uploading files:', error);
+     }
    }
    </script>
   </div> {# card-dropzone #}
