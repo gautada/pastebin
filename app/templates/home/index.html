@@ -61,9 +61,10 @@ body {
   <div class="card" id="dropzone-card">
    <h3 class="card-title">Drop Zone</h3>
    <div class="card-content" id="dropzone" tabindex="0" aria-label="drag and drop files here">
-    <input id="file-input" type="file" multiple />
-    <button id="upload-btn" type="button">Upload</button>
-
+    <form id="upload-form">
+     <input id="file-input" type="file" multiple />
+     <button id="upload-btn" type="button">Upload</button>
+    </form>
     <!-- input type="file" id="file-input" style="display:none" multiple />
     <button id="upload-btn">Upload</button>
     <form id="upload-form" action="/upload" method="post" enctype="multipart/form-data">
