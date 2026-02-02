@@ -61,24 +61,42 @@ body {
      }
    </style>
    
+   <style>
+     .dropzone {
+       border: 2px dashed #999;
+       border-radius: 12px;
+       padding: 24px;
+       background: #fafafa;
+       outline: none;
+       text-align: center;
+       display: block;
+       width: 100%;
+       max-width: 100%;
+     }
+   
+     .dropzone.dragover {
+       border-color: #333;
+       background: #f0f0f0;
+     }
+   </style>
+   
    <script>
    // JavaScript for handling dropzone functionality
-   const dropzone = document.getElementById('dropzone');
-   const uploadForm = document.getElementById('upload-form');
    let pendingFiles = [];
+   const dropzoneElement = document.getElementById('dropzone');
+   const uploadForm = document.getElementById('upload-form');
    
-   // Drag & drop functionality
-   if (dropzone) {
-     dropzone.addEventListener('dragover', (e) => {
+   if (dropzoneElement) {
+     dropzoneElement.addEventListener('dragover', (e) => {
        e.preventDefault();
-       dropzone.classList.add('dragover');
+       dropzoneElement.classList.add('dragover');
      });
    
-     dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+     dropzoneElement.addEventListener('dragleave', () => dropzoneElement.classList.remove('dragover'));
    
-     dropzone.addEventListener('drop', (e) => {
+     dropzoneElement.addEventListener('drop', (e) => {
        e.preventDefault();
-       dropzone.classList.remove('dragover');
+       dropzoneElement.classList.remove('dragover');
        if (e.dataTransfer?.files?.length) {
          addFiles(e.dataTransfer.files);
          uploadFiles(pendingFiles);
