@@ -36,31 +36,25 @@ body {
   width: 100%;
   max-width: 100%;
 }
+
+.dropzone {
+  border: 2px dashed #999;
+  border-radius: 12px;
+  padding: 24px;
+  background: #fafafa;
+  outline: none;
+  text-align: center;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+
+.dropzone.dragover {
+  border-color: #333;
+  background: #f0f0f0;
+}
 </style>
 
-<div class="columns">
- <div id="column-anchor" class="column">
-  <h2 class="column-title">Anchor</h2> 
-  <div id="card-dropzone" class="card">
-   <style>
-     .dropzone {
-       border: 2px dashed #999;
-       border-radius: 12px;
-       padding: 24px;
-       background: #fafafa;
-       outline: none;
-       text-align: center;
-       display: block;
-       width: 100%;
-       max-width: 100%;
-     }
-   
-     .dropzone.dragover {
-       border-color: #333;
-       background: #f0f0f0;
-     }
-   </style>
-   
    <!-- style>
      .dropzone {
        border: 2px dashed #999;
@@ -79,7 +73,21 @@ body {
        background: #f0f0f0;
      }
    </style -->
-   
+<div class="columns">
+ <div id="column-anchor" class="column">
+  <h2 class="column-title">Anchor</h2> 
+  <div class="card" id="dropzone-card">
+   <h3 class="card-title">Drop Zone</h3>
+   <div class="card-content" id="dropzone" tabindex="0" aria-label="Upload, paste, or drag and drop files here">
+    <input type="file" id="file-input" style="display:none" multiple />
+    <button id="upload-btn">Upload selected</button>
+    <form id="upload-form" action="/upload" method="post" enctype="multipart/form-data">
+     <textarea id="paste-content" name="content" placeholder="Paste content here..."></textarea>
+     <button type="submit">Create Paste</button>
+    </form>
+    <p>Drag and drop files here, or click to select files</p>
+   </div> {# card-content #}
+
    <script>
    // JavaScript for handling dropzone functionality
    let pendingFiles = [];
@@ -128,7 +136,7 @@ body {
      }
    }
    </script>
-  </div> {# card-dropzone #}
+  </div> {# dropzone-card #}
  </div> {# column-anchor #}
 
  <div class="column">
