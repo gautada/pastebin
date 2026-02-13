@@ -6,13 +6,35 @@
   box-sizing: border-box;
 }
 
-/* starter css */
 body {
   font-family: system-ui, -apple-system, sans-serif;
 }
 
+/* Layout  */
+.columns {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  width: 100%;
+}
 
+.column {
+  flex: 0 0 465px;
+  padding: 10px;
+  box-sizing: border-box;
+}
 
+.card {
+  margin-top: 16px;
+  padding: 16px;
+  border: 2px solid black;
+  border-radius: 12px;
+  background: #fff;
+
+  /* ensure cards can expand */
+  width: 100%;
+  max-width: 100%;
+}
 
 /* Dropzone container */
 .dropzone {
@@ -20,7 +42,7 @@ body {
   border-radius: 12px;
   padding: 24px;
   background: #fafafa;
-  outline: none;:
+  outline: none;
   text-align: center;
 
   /* ensure it can actually grow to available width */
@@ -29,13 +51,11 @@ body {
   max-width: 100%;
 }
 
-/* Drag feedback */
 .dropzone.dragover {
   border-color: #333;
   background: #f0f0f0;
 }
 
-/* Shared row layout */
 .row {
   display: flex;
   gap: 12px;
@@ -48,12 +68,9 @@ body {
   min-width: 0;
 }
 
-/* Results */
 .result {
   background: #111;
   color: #eee;
-  padding: 12px;
-  border-radius: 10px;
   overflow: auto;
 }
 
@@ -63,7 +80,6 @@ body {
   font-size: 0.9rem;
   margin-top: 10px;
 }
-
 
 /* --- Text mode layout inside dropzone --- */
 #text-view {
@@ -83,16 +99,6 @@ body {
   min-width: 0;
 }
 
-/*
-  Force the textarea to fill the available width.
-
-  You currently have inline: style="min-width:88ch;"
-  Inline styles are hard to override, so we use !important.
-
-  This uses:
-  - width: 100% so it grows with the parent
-  - min-width: min(88ch, 100%) so it *aims* for ~88ch but never exceeds its container
-*/
 #paste-content {
   display: block !important;
   width: 100% !important;
@@ -105,8 +111,47 @@ body {
   resize: vertical;
 }
 
-/* In text mode, align the form controls to the left */
 #text-view .row {
   justify-content: flex-start;
+}
+
+.header {
+  background-color: black;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.hamburger-menu {
+  position: relative;
+}
+
+.menu-icon {
+  cursor: pointer;
+  display: inline-block;
+}
+
+.menu-icon span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: white;
+  margin: 5px 0;
+  transition: 0.4s;
+}
+
+.nav {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: black;
+  padding: 10px;
+  box-shadow: 0 2px 10px rgb(0 0 0 / 10%);
+}
+
+#menu-toggle:checked + .menu-icon + .nav {
+  display: block;
 }
 

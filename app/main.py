@@ -2,10 +2,11 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 
+from app.web.routes.content import router as content_router
 from app.web.routes.home import router as home_router
-from app.web.routes.paste import router as paste_router
-from app.web.routes.paste_text import router as paste_text_router
+from app.web.routes.query import router as query_router
 from app.web.routes.upload import router as upload_router
+from app.web.routes.view import router as view_router
 
 # Default: Maybe move app/fastapi to this structure
 # def main():
@@ -25,13 +26,16 @@ def create_app() -> FastAPI:
     # *** REGISTER ROUTERS ***
     # GET "/" home/index.html
     app.include_router(home_router)
-    # POST "/upload"
+    # GET "/c/{id} raw blob as file"
+    app.include_router(content_router)
+    # GET "/q JSON"
+    app.include_router(query_router)
+    # GET "/v/{id} page or card"
+    app.include_router(view_router)
+
+    # POST "/u"
     app.include_router(upload_router)
-    # GET "/p/{id}"
-    # GET "/f/{id}"
-    app.include_router(paste_router)
-    # POST "/paste"
-    app.include_router(paste_text_router)
+
     return app
 
 

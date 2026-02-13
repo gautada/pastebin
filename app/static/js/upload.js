@@ -1,7 +1,7 @@
 const dropzone = document.getElementById('dropzone')
 const fileInput = document.getElementById('file-input')
 const uploadBtn = document.getElementById('upload-btn')
-const resultEl = document.getElementById('result')
+// const resultEl = document.getElementById('result')
 
 const pasteForm = document.getElementById('paste-form')
 const pasteContent = document.getElementById('paste-content')
@@ -17,8 +17,10 @@ let inTextMode = false
 
 // ---------- UI helpers ----------
 function setResult (obj) {
-  resultEl.textContent =
-    typeof obj === 'string' ? obj : JSON.stringify(obj, null, 2)
+  console.log(JSON.stringify(obj, null, 2))
+  // if (!resultEl) return;
+  // resultEl.textContent =
+  //  typeof obj === 'string' ? obj : JSON.stringify(obj, null, 2)
 }
 
 function setDragover (isOver) {
@@ -88,8 +90,9 @@ function addFiles (fileList) {
 
   pendingFiles.push(...files)
   setResult(
-    `Queued ${pendingFiles.length} file(s). Click "Upload selected" or drop/paste more.`
+    `Queued ${pendingFiles.length} file(s). Uploading now...`
   )
+  uploadFiles(pendingFiles)
 }
 
 async function uploadFiles (files) {
@@ -134,7 +137,9 @@ function textFromClipboardItems (items) {
 }
 
 async function handlePaste (e) {
+  console.log('Paste File!!!')
   const items = e.clipboardData?.items
+  console.log(items.length)
   if (!items) return
 
   const files = filesFromClipboardItems(items)

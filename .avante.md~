@@ -1,0 +1,65 @@
+# Avante Operating Rules
+
+This document defines the operating rules and coding standards for contributors to this production web app. All team members and collaborators should follow these guidelines to ensure consistency, reliability, and maintainability.
+
+---
+
+## Project Purpose and UI Approach
+
+This project is a production web application designed to provide a simple, reliable,
+and user-friendly pastebin service. The goal is to enable users to quickly upload,
+share, and manage text or files with minimal friction. The UI emphasizes clarity,
+accessibility, and responsiveness, following modern web standards and best practices.
+
+---
+
+## Coding Standards
+
+- Do not introduce unnecessary abstractions.
+- Avoid speculative refactoring.
+- Do not modify unrelated code.
+- Prefer explicit over implicit behavior.
+
+---
+
+## GitHub Actions
+
+- Preserve existing job structure.
+- Do not change runner types unless instructed.
+- Avoid adding new permissions unless required.
+- Keep steps minimal and explicit.
+
+---
+
+## Shell Scripts
+
+- Must pass ShellCheck.
+- Avoid non-POSIX features unless explicitly zsh.
+- Always quote variables.
+- Prefer long-form flags over short aliases.
+
+---
+
+## Dockerfiles
+
+- Keep layers minimal.
+- Avoid introducing cache-breaking instructions.
+- Do not change base image unless requested.
+
+---
+
+## Behavior Rules
+
+- NEVER auto-apply diffs.
+- If uncertain, ask for clarification.
+- If making changes, explain the minimal reasoning.
+- Prefer patch-style diffs.
+
+---
+
+## Output Format
+
+When editing files:
+
+- Return unified diff format.
+- Do not include markdown code fences unless requested.

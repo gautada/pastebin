@@ -1,90 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-<style>
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-body {
-  font-family: system-ui, -apple-system, sans-serif;
-}
-
-/* Layout  */
-.columns {
-  display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  width: 100%;
-}
-
-.column {
-  flex: 0 0 465px;
-  padding: 10px;
-  box-sizing: border-box;
-}
-
-.card {
-  margin-top: 16px;
-  padding: 16px;
-  border: 2px solid black;
-  border-radius: 12px;
-  background: #fff;
-  /* ensure cards can expand */
-  width: 100%;
-  max-width: 100%;
-}
-
-/* Dropzone container */
-.dropzone {
- border: 2px dashed #999;
- border-radius: 12px;
- padding: 24px;
- background: #fafafa;
- outline: none;
- text-align: center;
-  /* ensure it can actually grow to available width */
-  display: block;
-  width: 100%;
-  max-width: 100%;
-}
-
-.dropzone.dragover {
-  border-color: #333;
-  background: #f0f0f0;
-}
-
-.row {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  align-items: center;
-  margin-top: 12px;
-  flex-wrap: wrap;
-  /* important for flex children sizing correctly */
-  min-width: 0;
-}
-
-result {
-  background: #111;
-  color: #eee;
-  overflow: auto;
-}
-
-/* Helper text */
-.hint {
-  color: #666;
-  font-size: 0.9rem;
-  margin-top: 10px;
-}
-
-</style>
-
 <div class="columns">
  <div id="column-anchor" class="column">
   <h2 class="column-title">Anchor</h2> 
+
   <div class="card" id="dropzone-card">
    <h3 class="card-title">Drop Zone</h3>
    <div class="card-content dropzone" id="dropzone" tabindex="0" aria-label="drag and drop files here">
@@ -100,6 +19,18 @@ result {
     </div> {# dz-view #}
    </div> {# card-content #}
   </div> {# dropzone-card #}
+
+  <div class="card" id="latest-card">
+   <h3 class="card-title">Latest</h3>
+   <div class="card-content" id="latest" tabindex="1"
+        aria-label="latest uploaded cards">
+    <div id="latest-view">
+     <ul id="latest-list">
+      <li>Waiting to download latest cards</li>
+     </ul>
+    </div> {# latest-view #}
+   </div> {# card-content #}
+ </div> 
  </div> {# column-anchor #}
 
  <div class="column">
@@ -158,9 +89,6 @@ result {
   </div>
 {% endfor %}
 </div>
-
-
- 
 
 <script src="{{ url_for('static', path='js/upload.js') }}"></script>
 {% endblock %}
