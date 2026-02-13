@@ -7,9 +7,8 @@ response. The endpoint supports multiple file uploads in a single request.
 """
 
 from pathlib import Path
-from typing import List
 
-from fastapi import APIRouter, File, Request, UploadFile
+from fastapi import APIRouter, Request, UploadFile
 from fastapi.responses import JSONResponse
 
 from app.infra.storage import save_bytes
@@ -23,7 +22,7 @@ UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 
 @router.post("/u")
-async def upload(request: Request, files: List[UploadFile] = File(...)):
+async def upload(request: Request, files: list[UploadFile] = None):
     """
     Upload one or more files to the server.
 

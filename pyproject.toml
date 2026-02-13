@@ -26,8 +26,21 @@ dev = [
     "ruff>=0.14.11",
 ]
 
-[tool.isort]
-profile = "black"
-line_length = 88
-known_first_party = ["app"]
-src_paths = ["app"]
+
+[tool.black]
+line-length = 88
+target-version = ["py313"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E501"]  # let Black decide wrapping
+
+# [tool.isort]
+# profile = "black"
+# line_length = 88
+# known_first_party = ["app"]
+# src_paths = ["app"]

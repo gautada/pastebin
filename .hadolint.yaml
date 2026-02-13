@@ -1,4 +1,4 @@
 ---
 ignored:
-  - DL4006  # Eliminates the need for SHELL command on `|`.
-  - DL3018  # Pin versions in apk add.
+  - DL4006 # Eliminates the need for SHELL command on `|`.
+  - DL3018 # Pin versions in apk add.

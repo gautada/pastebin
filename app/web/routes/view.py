@@ -60,7 +60,6 @@ MAX_INLINE_BYTES = 200_000  # don’t try to render huge blobs inline
 
 @router.get("/v/{blob_id}", response_class=HTMLResponse)
 def view(blob_id: str, request: Request):
-
     rec = get_record(blob_id)
     if not rec:
         return PlainTextResponse("Record not found", status_code=404)

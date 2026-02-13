@@ -5,7 +5,6 @@ import mimetypes
 import os
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Optional
 from uuid import uuid4
 
 DATA_DIR = Path("data")
@@ -44,7 +43,7 @@ class BlobRecord:
 
 
 def save_bytes(
-    filename: str, content: bytes, content_type: Optional[str] = None
+    filename: str, content: bytes, content_type: str | None = None
 ) -> BlobRecord:
     blob_id = new_id()
     suffix = Path(filename).suffix if filename else ""
@@ -71,7 +70,7 @@ def save_bytes(
     return rec
 
 
-def get_record(blob_id: str) -> Optional[BlobRecord]:
+def get_record(blob_id: str) -> BlobRecord | None:
     idx = _load_index()
     rec = idx.get(blob_id)
     if not rec:

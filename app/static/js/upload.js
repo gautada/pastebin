@@ -89,9 +89,7 @@ function addFiles (fileList) {
   if (!files.length) return
 
   pendingFiles.push(...files)
-  setResult(
-    `Queued ${pendingFiles.length} file(s). Uploading now...`
-  )
+  setResult(`Queued ${pendingFiles.length} file(s). Uploading now...`)
   uploadFiles(pendingFiles)
 }
 
@@ -166,7 +164,9 @@ async function handlePaste (e) {
 if (fileInput) {
   fileInput.addEventListener('change', (e) => addFiles(e.target.files))
 }
-if (uploadBtn) uploadBtn.addEventListener('click', () => uploadFiles(pendingFiles))
+if (uploadBtn) {
+  uploadBtn.addEventListener('click', () => uploadFiles(pendingFiles))
+}
 
 // Combined-zone behavior: double click or typing switches to textarea
 if (dropzone && dzView && textView && pasteContent) {
@@ -182,7 +182,8 @@ if (dropzone && dzView && textView && pasteContent) {
       return
     }
 
-    const isPaste = (e.ctrlKey || e.metaKey) && (e.key === 'v' || e.key === 'V')
+    const isPaste =
+      (e.ctrlKey || e.metaKey) && (e.key === 'v' || e.key === 'V')
     if (isPaste) return
 
     // ignore navigation/modifier keys

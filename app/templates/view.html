@@ -1,35 +1,36 @@
-{% extends "base.html" %}
-{% block content %}
-  <h2>Paste</h2>
+{% extends "base.html" %} {% block content %}
+<h2>Paste</h2>
 
-  <p>
-    <strong>ID:</strong> {{ rec.id }}<br>
-    <strong>Name:</strong> {{ rec.original_name }}<br>
-    <strong>Type:</strong> {{ rec.content_type }}<br>
-    <strong>Size:</strong> {{ rec.bytes }} bytes
-  </p>
+<p>
+  <strong>ID:</strong> {{ rec.id }}<br />
+  <strong>Name:</strong> {{ rec.original_name }}<br />
+  <strong>Type:</strong> {{ rec.content_type }}<br />
+  <strong>Size:</strong> {{ rec.bytes }} bytes
+</p>
 
-  <p>
-    <a href="/f/{{ rec.id }}">Download</a>
-  </p>
+<p>
+  <a href="/f/{{ rec.id }}">Download</a>
+</p>
 
-  {% if inline_text is not none %}
-    <h3>Preview</h3>
-    <!-- Prism needs the language-* class. Escape content so HTML isn't executed. -->
-    <pre class="result"><code class="language-{{ lang | e }}">{{ inline_text | e }}</code></pre>
-    <!-- <pre class="result" style="white-space: pre-wrap;">{{ inline_text }}</pre> -->
-  {% else %}
-    <p class="hint">No inline preview available (binary or too large).</p>
-  {% endif %}
+{% if inline_text is not none %}
+<h3>Preview</h3>
+<!-- Prism needs the language-* class. Escape content so HTML isn't executed. -->
+<pre
+  class="result"
+><code class="language-{{ lang | e }}">{{ inline_text | e }}</code></pre>
+<!-- <pre class="result" style="white-space: pre-wrap;">{{ inline_text }}</pre> -->
+{% else %}
+<p class="hint">No inline preview available (binary or too large).</p>
+{% endif %}
 
-  <!-- Prism (client-side) -->
-<link rel="stylesheet" href="https://unpkg.com/prismjs/themes/prism.css">
+<!-- Prism (client-side) -->
+<link rel="stylesheet" href="https://unpkg.com/prismjs/themes/prism.css" />
 <script src="https://unpkg.com/prismjs/prism.js"></script>
 
 <!-- Autoloader: loads languages on demand -->
 <script src="https://unpkg.com/prismjs/plugins/autoloader/prism-autoloader.min.js"></script>
 <script>
-  Prism.plugins.autoloader.languages_path = "https://unpkg.com/prismjs/components/";
+  Prism.plugins.autoloader.languages_path =
+    "https://unpkg.com/prismjs/components/";
 </script>
 {% endblock %}
-
