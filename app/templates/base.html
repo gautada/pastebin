@@ -14,39 +14,62 @@
   </head>
   <body>
     {% block header %}
-    <header class="header">
-      <h1>Pastebin</h1>
-      <div class="search">
-        <input type="text" placeholder="Search..." aria-label="Search" />
-        <button type="button">Search</button>
+    <header class="site-header">
+      <div class="brand">
+        <a class="brand-title" href="/">Pastebin</a>
+        <p class="brand-tagline">Drop · Bin · Retrieve</p>
       </div>
-      <div class="hamburger-menu">
-        <input type="checkbox" id="menu-toggle" style="display: none" />
-        <label for="menu-toggle" class="menu-icon">
-          <span></span>
-          <span></span>
-          <span></span>
-        </label>
-        <nav class="nav">
-          <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Features</a></li>
-            <li><a href="#">Pricing</a></li>
-            <li><a href="#">Contact</a></li>
-          </ul>
-        </nav>
+
+      <button
+        class="menu-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="primary-nav"
+        data-nav-toggle
+      >
+        <span class="sr-only">Toggle navigation</span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav class="nav-links" id="primary-nav" aria-label="Primary" data-nav>
+        <a href="#upload">Upload</a>
+        <a href="#latest">Latest</a>
+        <a href="#results">Results</a>
+        <a href="/search">Search</a>
+      </nav>
+
+      <div class="header-actions">
+        <form class="search-form" action="/search" method="get" role="search">
+          <label class="sr-only" for="header-search">Search bins</label>
+          <input
+            id="header-search"
+            name="q"
+            type="search"
+            placeholder="Search by name or ID"
+            aria-label="Search bins"
+            value="{{ request.query_params.get('q', '') }}"
+          />
+          <button type="submit">Search</button>
+        </form>
+        <a class="bin-link" href="#upload">New Bin</a>
       </div>
     </header>
     <script>
-      document.querySelectorAll(".menu-icon").forEach((item) => {
-        item.addEventListener("click", (event) => {
-          const nav = item.nextElementSibling;
-          nav.style.display = nav.style.display === "block" ? "none" : "block";
+      const navToggle = document.querySelector('[data-nav-toggle]');
+      const nav = document.querySelector('[data-nav]');
+
+      if (navToggle && nav) {
+        navToggle.addEventListener('click', () => {
+          const expanded = navToggle.getAttribute('aria-expanded') === 'true';
+          navToggle.setAttribute('aria-expanded', String(!expanded));
+          nav.dataset.open = expanded ? 'false' : 'true';
         });
-      });
+      }
     </script>
     {% endblock %} {% block content %}{% endblock %} {% block footer %}
-    <footer>
+    <footer id="results">
       <h3>Results</h3>
       <pre id="result" class="result">No uploads yet.</pre>
       <p>Status: Ready</p>

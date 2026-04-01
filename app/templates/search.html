@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="search-page" id="search">
+  <div class="card">
+    <h2>Search bins</h2>
+    {% if query %}
+    <p>
+      Showing
+      <strong>{{ results|length }}</strong>
+      result{{ '' if results|length == 1 else 's' }} for
+      <mark>{{ query }}</mark>.
+    </p>
+    {% else %}
+    <p>Enter a name or bin ID above to look up existing uploads.</p>
+    {% endif %}
+
+    {% if query and results %}
+    <ul class="search-results">
+      {% for rec in results %}
+      <li class="search-result">
+        <div class="result-meta">
+          <strong>{{ rec.original_name }}</strong>
+          <span class="muted">{{ rec.bytes }} bytes · {{ rec.content_type }}</span>
+          <span class="muted">ID: {{ rec.id }}</span>
+        </div>
+        <div class="result-actions">
+          <a class="btn-link" href="{{ request.url_for('view', blob_id=rec.id) }}"
+            >View</a
+          >
+          <a
+            class="btn-link secondary"
+            href="{{ request.url_for('download', blob_id=rec.id) }}"
+            >Download</a
+          >
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+    {% elif query %}
+    <p>No bins matched that query yet.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

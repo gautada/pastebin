@@ -5,6 +5,7 @@ from starlette.templating import Jinja2Templates
 from app.web.routes.content import router as content_router
 from app.web.routes.home import router as home_router
 from app.web.routes.query import router as query_router
+from app.web.routes.search import router as search_router
 from app.web.routes.upload import router as upload_router
 from app.web.routes.view import router as view_router
 
@@ -30,6 +31,8 @@ def create_app() -> FastAPI:
     app.include_router(content_router)
     # GET "/q JSON"
     app.include_router(query_router)
+    # GET "/search" UI
+    app.include_router(search_router)
     # GET "/v/{id} page or card"
     app.include_router(view_router)
 

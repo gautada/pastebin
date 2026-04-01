@@ -80,3 +80,26 @@ def get_record(blob_id: str) -> BlobRecord | None:
 
 def get_path(rec: BlobRecord) -> Path:
     return BLOB_DIR / rec.stored_name
+
+
+def search_records(term: str, limit: int = 20) -> list[BlobRecord]:
+    """Return up to `limit` blob records matching the search term.
+
+    Matches look at both the blob id and original filename (case-insensitive)
+    and are returned newest-first.
+    """
+    query = (term or '').strip().lower()
+    if not query:
+        return []
+
+    idx = _load_index()
+    results: list[BlobRecord] = []
+    for rec in reversed(list(idx.values())):
+        name = rec.get('original_name', '').lower()
+        blob_id = rec.get('id', '').lower()
+        if query in name or query in blob_id:
+            results.append(BlobRecord(**rec))
+        if len(results) >= limit:
+            break
+    return results
+
