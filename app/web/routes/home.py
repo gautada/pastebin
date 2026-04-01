@@ -11,7 +11,6 @@ router = APIRouter()
 @router.get("/", response_class=HTMLResponse)
 def home(request: Request):
     return templates.TemplateResponse(
-        "home/index.html",
-        # {"request": request, "title": "Home"},
+        "index.html",
         {"request": request, "title": "Upload"},
     )
