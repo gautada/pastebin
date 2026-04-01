@@ -1,7 +1,9 @@
 const dropzone = document.getElementById('dropzone')
 const fileInput = document.getElementById('file-input')
 const uploadBtn = document.getElementById('upload-btn')
-// const resultEl = document.getElementById('result')
+const resultsList = document.getElementById('results-list')
+const resultsEmpty = document.getElementById('results-empty')
+const resultsStatus = document.getElementById('results-status')
 
 const pasteForm = document.getElementById('paste-form')
 const pasteContent = document.getElementById('paste-content')
@@ -14,17 +16,83 @@ const cancelTextBtn = document.getElementById('cancel-text-btn')
 
 let pendingFiles = []
 let inTextMode = false
+const MAX_RESULTS = 5
 
 // ---------- UI helpers ----------
 function setResult (obj) {
-  console.log(JSON.stringify(obj, null, 2))
-  // if (!resultEl) return;
-  // resultEl.textContent =
-  //  typeof obj === 'string' ? obj : JSON.stringify(obj, null, 2)
+  const message = typeof obj === 'string' ? obj : JSON.stringify(obj, null, 2)
+  console.log(message)
+  if (resultsStatus) resultsStatus.textContent = message
 }
 
 function setDragover (isOver) {
   dropzone.classList.toggle('dragover', isOver)
+}
+
+function formatBytes (bytes) {
+  if (!Number.isFinite(bytes)) return ''
+  if (bytes < 1024) return `${bytes} B`
+  const units = ['KB', 'MB', 'GB', 'TB']
+  let size = bytes
+  let unit = 'KB'
+  for (const label of units) {
+    size /= 1024
+    unit = label
+    if (size < 1024) break
+  }
+  return `${size.toFixed(1)} ${unit}`
+}
+
+function renderResultsRow (entry) {
+  if (!resultsList) return
+
+  const item = document.createElement('li')
+  item.className = 'results-row'
+
+  const details = document.createElement('div')
+  details.className = 'result-details'
+  const name = document.createElement('p')
+  name.className = 'result-name'
+  name.textContent = entry.original_name || entry.id
+  const meta = document.createElement('p')
+  meta.className = 'result-meta'
+
+  const type = document.createElement('span')
+  type.className = 'badge'
+  type.textContent = entry.content_type || 'unknown'
+  const size = document.createElement('span')
+  size.textContent = formatBytes(entry.bytes)
+  const id = document.createElement('span')
+  id.textContent = entry.id
+
+  meta.append(type, size, id)
+  details.append(name, meta)
+
+  const actions = document.createElement('div')
+  actions.className = 'result-actions'
+  if (entry.view_url) {
+    const view = document.createElement('a')
+    view.href = entry.view_url
+    view.target = '_blank'
+    view.rel = 'noopener'
+    view.className = 'btn-link'
+    view.textContent = 'View'
+    actions.append(view)
+  }
+  if (entry.download_url) {
+    const dl = document.createElement('a')
+    dl.href = entry.download_url
+    dl.className = 'btn-link secondary'
+    dl.textContent = 'Download'
+    actions.append(dl)
+  }
+
+  item.append(details, actions)
+  resultsList.prepend(item)
+
+  while (resultsList.children.length > MAX_RESULTS) {
+    resultsList.removeChild(resultsList.lastElementChild)
+  }
 }
 
 function enterTextMode (opts) {
@@ -75,12 +143,16 @@ async function postForm (url, form) {
 }
 
 function renderSavedLinks (data) {
-  if (data?.saved?.length) {
-    const lines = data.saved.map((s) => `${s.original_name} -> ${s.view_url}`)
-    setResult(lines.join('\n'))
-    return true
-  }
-  return false
+  const saved = Array.isArray(data?.saved) ? data.saved : []
+  if (!saved.length || !resultsList) return false
+
+  if (resultsEmpty) resultsEmpty.hidden = true
+  resultsList.hidden = false
+  saved.forEach((entry) => renderResultsRow(entry))
+
+  const label = saved.length === 1 ? `Saved ${saved[0].original_name || saved[0].id}` : `Saved ${saved.length} files`
+  setResult(label)
+  return true
 }
 
 // ---------- File queue helpers ----------

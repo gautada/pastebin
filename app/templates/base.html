@@ -46,10 +46,18 @@
       });
     </script>
     {% endblock %} {% block content %}{% endblock %} {% block footer %}
-    <footer>
-      <h3>Results</h3>
-      <pre id="result" class="result">No uploads yet.</pre>
-      <p>Status: Ready</p>
+    <footer id="results" class="results-panel">
+      <div class="results-header">
+        <div>
+          <h3>Results</h3>
+          <p class="muted">Latest uploads this session</p>
+        </div>
+        <p id="results-status" class="sr-only" aria-live="polite">Ready</p>
+      </div>
+      <div class="results-body">
+        <div id="results-empty" class="results-empty">No uploads yet.</div>
+        <ul id="results-list" class="results-list" hidden></ul>
+      </div>
     </footer>
     {% endblock %}
   </body>
