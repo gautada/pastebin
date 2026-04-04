@@ -1,80 +1,58 @@
-ARG ALPINE_VERSION=3.22
+ARG ICORN_VERSION=3.23
 
-FROM docker.io/gautada/alpine:$ALPINE_VERSION as plik-frontend-builder
+FROM docker.io/gautada/icorn:$ICORN_VERSION as BUILD
 
-ARG IMAGE_NAME=plik
-ARG IMAGE_VERSION=1.3.8
+ARG GITHUB_TAG=dev
 
-WORKDIR /opt
-RUN git clone --branch ${IMAGE_VERSION} https://github.com/root-gg/plik.git ${IMAGE_NAME}
-WORKDIR /opt/${IMAGE_NAME}
-RUN apk add --no-cache bash go make npm
-# ENV CGO_ENABLED="0 go build"
-# RUN export CGO_CFLAGS="-DSQLITE_DISABLE_LFS" \
-#  && export CGO_LDFLAGS="-DSQLITE_DISABLE_LFS"
-RUN make clean-frontend frontend
-WORKDIR /opt/${IMAGE_NAME}/server
+RUN apk add --no-cache \
+    python3 py3-pip python3-dev \
+    build-base musl-dev linux-headers \
+    libffi-dev openssl-dev \
+    curl uv
+WORKDIR /opt/icorn
+COPY . .
+# RUN git clone --branch ${GITHUB_TAG} https://github.com/gautada/icorn.git icorn \
+RUN chown icorn:icorn -R /opt/icorn 
+# WORKDIR /opt/icorn
+USER icorn
+RUN uv venv .venv \
+ && uv sync --frozen --no-dev
 
-##################################################################################
-FROM --platform=$BUILDPLATFORM golang:1-bullseye AS plik-builder
+################################################################################
 
-ARG IMAGE_NAME=plik
-ARG IMAGE_VERSION=1.3.8
+FROM docker.io/gautada/icorn:$ICORN_VERSION as CONTAINER
 
-# Install needed binaries
-RUN apt-get update && apt-get install -y build-essential crossbuild-essential-armhf crossbuild-essential-armel crossbuild-essential-arm64 crossbuild-essential-i386
-
-# Prepare the source location
-RUN mkdir -p /go/src/github.com/root-gg
-WORKDIR /go/src/github.com/root-gg
-RUN git clone --branch ${IMAGE_VERSION} https://github.com/root-gg/plik.git ${IMAGE_NAME}
-WORKDIR /go/src/github.com/root-gg/plik
-
-# Copy webapp build from previous stage
-COPY --from=plik-frontend-builder /opt/plik/webapp/dist webapp/dist
-
-ARG CLIENT_TARGETS=""
-ENV CLIENT_TARGETS=$CLIENT_TARGETS
-
-ARG TARGETOS TARGETARCH TARGETVARIANT CC
-ENV TARGETOS=$TARGETOS
-ENV TARGETARCH=$TARGETARCH
-ENV TARGETVARIANT=$TARGETVARIANT
-ENV CC=$CC
-
-# Add the source code ( see .dockerignore )
-# COPY . .
-
-RUN releaser/releaser.sh
-
-
-
-FROM docker.io/gautada/alpine:$ALPINE_VERSION as CONTAINER
-
-ARG IMAGE_NAME=plik
-ARG IMAGE_VERSION=1.3.8
+ARG IMAGE_NAME=pastebin
+ARG IMAGE_VERSION=0.0.1
 
 # ╭――――――――――――――――――――╮
 # │ METADATA           │
 # ╰――――――――――――――――――――╯
 LABEL org.opencontainers.image.title="${IMAGE_NAME}"
-LABEL org.opencontainers.image.description="A ${IMAGE_NAME} pastebin"
+LABEL org.opencontainers.image.description="A ${IMAGE_NAME} server"
 LABEL org.opencontainers.image.url="https://hub.docker.com/r/gautada/${IMAGE_NAME}"
 LABEL org.opencontainers.image.source="https://github.com/gautada/${IMAGE_NAME}"
 LABEL org.opencontainers.image.version="${IMAGE_VERSION}"
 LABEL org.opencontainers.image.license="Upstream"
 
-# ╭――――――――――――――――――――╮
-# │ USER               │
-# ╰――――――――――――――――――――╯
-ARG USER=plik
-RUN /usr/sbin/usermod -l $USER alpine \
-&& /usr/sbin/usermod -d /home/$USER -m $USER \ 
-&& /usr/sbin/groupmod -n $USER alpine \
-&& /bin/echo "$USER:$USER" | /usr/sbin/chpasswd 
+# # ╭――――――――――――――――――――╮
+# # │ USER               │
+# # ╰――――――――――――――――――――╯
+ARG USER=icorn
+# RUN /usr/sbin/usermod -l $USER alpine \
+# && /usr/sbin/usermod -d /home/$USER -m $USER \ 
+# && /usr/sbin/groupmod -n $USER alpine \
+# && /bin/echo "$USER:$USER" | /usr/sbin/chpasswd 
 
 # ╭――――――――――――――――――――╮
 # │ CONTAINER          │
 # ╰――――――――――――――――――――╯
-COPY --from=plik-builder --chown $USER:$USER /go/src/github.com/root-gg/plik/release /home/plik/
-COPY plik.s6 /etc/services.d/plik/run
+# COPY uvicorn.s6 /etc/services.d/uvicorn/run
+# RUN apk add --no-cache python3 uv libffi openssl ca-certificates
+# # Copy the venv and app code from builder
+COPY --from=BUILD /opt/icorn /opt/icorn
+COPY --from=BUILD /home/icorn/.local /home/${USER}/.local
+RUN chown ${USER}:${USER} -R /opt/icorn /home/${USER}
+WORKDIR /home/${USER}
+# RUN ln -fsv /home/${USER}/.local/share/uv/python/cpython-3.13.11-linux-aarch64-musl/bin/python3.13 /opt/icorn/.venv/bin/python
+

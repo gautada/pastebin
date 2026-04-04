@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="{{ url_for('static', path='favicon.ico') }}" />
+    <title>{{ title or "myapp" }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/app.css') }}" />
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    <!-- Optional -->
+    <script
+      defer
+      src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </head>
+  <body>
+    {% block header %}
+    <header class="app-header">
+      <div class="header-inner">
+        <div class="header-brand">
+          <a class="header-logo" href="/">Pastebin</a>
+          <p class="header-tagline">Drop files, snippets, and bins without friction.</p>
+        </div>
+        <form class="header-search" action="/query" method="get" role="search">
+          <label class="sr-only" for="site-search">Search bins</label>
+          <input
+            id="site-search"
+            type="search"
+            name="q"
+            placeholder="Search bin IDs or filenames"
+            autocomplete="off"
+          />
+          <button type="submit">Search</button>
+        </form>
+        <div class="header-actions" data-header-panel id="header-panel">
+          <a class="btn btn-primary" href="#dropzone-card">New bin</a>
+          <a class="btn btn-ghost" href="#latest-card">Browse bins</a>
+        </div>
+        <button
+          class="header-toggle"
+          type="button"
+          aria-controls="header-panel"
+          aria-expanded="false"
+        >
+          <span class="sr-only">Toggle quick actions</span>
+          <span class="header-toggle-bar"></span>
+          <span class="header-toggle-bar"></span>
+        </button>
+      </div>
+    </header>
+    <script>
+      (function () {
+        const toggle = document.querySelector(".header-toggle")
+        const panel = document.querySelector("[data-header-panel]")
+        if (!toggle || !panel) return
+        toggle.addEventListener("click", () => {
+          const open = panel.toggleAttribute("data-open")
+          toggle.setAttribute("aria-expanded", open ? "true" : "false")
+        })
+      })()
+    </script>
+    {% endblock %} {% block content %}{% endblock %} {% block footer %}
+    <footer id="results" class="results-panel">
+      <div class="results-header">
+        <div>
+          <h3>Results</h3>
+          <p class="muted">Latest uploads this session</p>
+        </div>
+        <p id="results-status" class="sr-only" aria-live="polite">Ready</p>
+      </div>
+      <div class="results-body">
+        <div id="results-empty" class="results-empty">No uploads yet.</div>
+        <div class="results-table" role="region" aria-label="Upload results" hidden>
+          <div class="results-columns" aria-hidden="true">
+            <span>File</span>
+            <span>Details</span>
+            <span class="col-actions">Actions</span>
+          </div>
+          <ul id="results-list" class="results-list" hidden></ul>
+        </div>
+      </div>
+    </footer>
+    {% endblock %}
+  </body>
+</html>
